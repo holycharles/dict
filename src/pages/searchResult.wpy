@@ -1,0 +1,157 @@
+<style lang="less">
+  .container {
+    font-size: 24rpx;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    height: 100%;
+    .loading {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+        text {
+           color: #ccc;
+           margin-top: 50rpx;
+        }
+    }
+    .result {
+      padding: 0 10rpx;
+      .result-item {
+        padding: 20rpx 0;
+        width: 100%;
+        margin: 0 auto 5rpx;
+        background-color: #EB6794;
+        color: #fff;
+
+        .title {
+            width:500rpx;
+            display: block;
+            margin:0 auto;
+            font-size: 50rpx;
+           text-align: center;
+        }
+        .txt {
+          width:500rpx;
+          display: block;
+          margin:0 auto;
+          font-size: 30rpx;
+          text-align: center;
+        }
+        .sound {
+            width: 65%;
+            display: flex;
+            flex-direction: row;
+            margin: 0 auto;
+            justify-content: space-between;
+            view {
+                width: 150rpx;
+                height: 40rpx;
+                background: #AC1D10;
+                color: #fff;
+                text-align: center;
+                line-height: 40rpx;
+                border-radius: 14rpx;
+                font-size: 20rpx;
+            }
+          view.female {
+            background: #F5BDD1;
+          }
+        }
+      }
+    }
+  }
+
+</style>
+<template>
+
+
+  <view class="container">　
+    <audio src="{{soundsrc}}" id="myAudio"></audio>
+  <view class="loading" wx-if="{{loading}}">
+   <image style="width: 55px; height: 55px; background-color: #eeeeee;" src="./images/ajax-loader.gif"></image>
+      <text>正在为您查询结果，请稍后...</text>
+   </view>
+    <view wx-if="{{!loading}}" class="result">
+      <view class="result-item" wx:for="{{types}}" wx:for-item="type" wx:key="type">
+        <text class="title">{{type}} </text>
+        <text class="txt">{{words[index] }}</text>
+        <view class="sound">
+           <view bindtap="audioPlay" data-sex="2" data-index="{{index+1}}"><text>male</text></view>
+          <view class="female" bindtap="audioPlay"  data-sex="1" data-index="{{index+1}}"><text>female</text></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '查询结果'
+    }
+    components = {
+
+    }
+
+
+    data = {
+        soundsrc: "http://www.gavo.t.u-tokyo.ac.jp/ojad/sound4/mp3/female/010/1053_1_1_female.mp3?20121005",
+      　id: 0,
+        words: [],
+        loading: true,
+        types: ["原型", "〜ます形","〜て形","〜た形","〜ない形","〜なかった形","〜ば形","使役形","被动式", "命令形","可能形, ","〜う形"]
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      audioPlay: function (e) {
+       let id = e.currentTarget.dataset.index;
+       let sex = e.currentTarget.dataset.sex;
+       let sexname = sex== "1" ? "female" : "male";
+       var hundert = ("00" + Math.floor(parseInt(this.id) / 100)).slice(-3);
+       let src = `http://www.gavo.t.u-tokyo.ac.jp/ojad/sound4/mp3/${sexname}/${hundert}/${this.id}_${id}_1_${sexname}.mp3?20121005`;
+       console.log(src);
+       this.soundsrc = src;
+       this.$apply();
+        this.audioCtx.play()
+      }
+
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+      let self = this;
+      this.audioCtx = wx.createAudioContext('myAudio')
+      wx.request({
+          url: 'http://192.168.31.233/dict?keyword=' +  options.keyword, //仅为示例，并非真实的接口地址
+          data: {
+
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success: function(res) {
+             console.log(res);
+            self.words = res.data.words;
+            self.loading = false;
+            self.id = res.data.index;
+            self.$apply();
+
+          },
+          fail: function() {
+
+          }
+        })
+    }
+  }
+</script>

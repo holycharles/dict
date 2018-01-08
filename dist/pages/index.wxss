@@ -1,0 +1,1 @@
+.container{font-size:24rpx}.container .input{width:80%;height:50rpx;line-height:50rpx;margin:0 auto;border:1rpx solid #ccc;border-radius:40rpx;padding-left:20rpx;margin-top:40rpx;color:#595959}.container .search{width:80%;background-color:#EB6794;height:70rpx;line-height:70rpx;color:#fff;font-size:24rpx;margin:20rpx auto 0;text-align:center}

@@ -1,0 +1,8 @@
+
+
+
+  <view class="container">
+    <input placeholder="请输入要查询的日语动词原型" class="input" value="{{inputtext}}" bindinput="bindKeyInput"/>
+
+    <button class="search" bindtap="search" data-wpysearch-a="1"><text>搜索</text> </button>
+  </view>

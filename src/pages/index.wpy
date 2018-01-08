@@ -1,0 +1,85 @@
+<style lang="less">
+  .container {
+    font-size: 24rpx;
+    .input {
+      width: 80%;
+      height: 50rpx;
+      line-height: 50rpx;
+      margin: 0 auto;
+      border: 1rpx solid #ccc;
+      border-radius: 40rpx;
+      padding-left: 20rpx;
+      margin-top: 40rpx;
+      color: #595959;
+    }
+    .search  {
+      width: 80%;
+      background-color: #EB6794;
+      height: 70rpx;
+      line-height: 70rpx;
+      color: #fff;
+      font-size: 24rpx;
+      margin: 20rpx auto 0;
+      text-align: center;
+    }
+  }
+
+</style>
+<template>
+
+
+  <view class="container">
+    <input placeholder="请输入要查询的日语动词原型" class="input" value="{{inputtext}}" bindinput="bindKeyInput"/>
+
+    <button class="search" @tap="search('1')"><text>搜索</text> </button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '霓虹酱物语'
+    }
+    components = {
+
+    }
+
+
+    data = {
+        inputtext: ""
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      search(parm) {
+        console.log(this.inputtext)
+
+        wx.navigateTo({
+          url: '/pages/searchResult?keyword=' + this.inputtext
+        });
+
+
+      },
+      bindKeyInput(e) {
+        this.inputtext =  e.detail.value;
+        this.$apply()
+      }
+
+    }
+
+    events = {
+
+    }
+
+    onLoad() {
+
+    }
+  }
+</script>

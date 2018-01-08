@@ -1,0 +1,20 @@
+
+
+
+  <view class="container">　
+    <audio src="{{soundsrc}}" id="myAudio"/>
+  <view class="loading" wx-if="{{loading}}">
+   <image style="width: 55px; height: 55px; background-color: #eeeeee;" src="./images/ajax-loader.gif"/>
+      <text>正在为您查询结果，请稍后...</text>
+   </view>
+    <view wx-if="{{!loading}}" class="result">
+      <view class="result-item"  wx:for="{{types}}" wx:for-item="type" wx:key="type">
+        <text class="title">{{type}} </text>
+        <text class="txt">{{words[index] }}</text>
+        <view class="sound">
+           <view bindtap="audioPlay" data-sex="2" data-index="{{index+1}}"><text>male</text></view>
+          <view class="female" bindtap="audioPlay" data-sex="1" data-index="{{index+1}}"><text>female</text></view>
+        </view>
+      </view>
+    </view>
+  </view>
